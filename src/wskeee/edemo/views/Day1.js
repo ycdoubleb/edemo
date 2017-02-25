@@ -37,7 +37,7 @@ class WatchControl extends Component{
         this.state = {
             watching:false,             //是否在计时
             leftBtnText:'计次',
-            leftBtnUnderlayColor:'#fff',
+            leftBtnUnderlayColor:'#fff', 
             rightBtnText:'开始',
             rightBtnColor:'#60B644',
         }
@@ -136,32 +136,170 @@ class WatchRecord extends Component{
 
     render(){
         let ds = new ListView.DataSource({rowHasChanged:(r1,r2)=>r1 !== r2});
-        const dataSrouce = ds.cloneWithRows(this.props.records);
+        let _dataSource = ds.cloneWithRows(this.props.records);
         return (
-            <ListView style={styles.recordList}>
-                dataSrouce = {dataSrouce},
+            <ListView style={styles.recordList}
+                dataSource = {_dataSource}
                 renderRow = {(rowData)=>
                     <View style={styles.recordListItem}>
                         <Text style={styles.recordListItemTitle}>{rowData.title}</Text>
                         <View style={styles.recordListItemTimeContainer}>
-                            <Text style={styles.recordListItemTime}></Text>
+                            <Text style={styles.recordListItemTime}>{rowData.time}</Text>
                         </View>
                     </View>
-                }
-            </ListView>
+                }/>
         );
     }
 }
 
 export default class Day1 extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            watching: true,
+            isReset: true,
+            intialTime: 0,
+            currentTime: 0,
+            recordTime: 0,          //最后记录时间
+            accumulationTime: 0,    //累加时间
+            totalTime: "00:00.00",
+            sectionTime: "00:00.00",
+            recordCounter: 0,
+            records:[
+                {title:"",time:""},
+                {title:"",time:""},
+                {title:"",time:""},
+                {title:"",time:""},
+                {title:"",time:""},
+                {title:"",time:""}
+            ]
+        };
+    }
+
+    componentWillUnmount(){
+        this.stopWatch();
+        this.clearWatch();
+    }
+
+    componentDidMount(){
+
+    }
+
+    //============================================================================
+    //
+    // act 
+    //
+    //============================================================================
+    startWatch(){
+        if(this.state.isReset){
+            this.setState({
+                watching: true,
+                isReset: false,
+                accumulationTime: 0,
+                intialTime: (new Date()).getTime(),
+            });
+        }else{
+            this.setState({
+                watching: true,
+                intialTime: (new Date()).getTime(),
+            });
+        }
+        let minute,second,ms,accumulationTime,minute2,second2,ms2,recordTime,currentTime;
+        let intervalID = setInterval(
+            ()=>{
+                currentTime = (new Date()).getTime();
+                //计算总累加时间
+                accumulationTime = this.state.accumulationTime + currentTime - this.state.intialTime;
+                minute = Math.floor(accumulationTime / (60 * 1000));
+                second = Math.floor((accumulationTime - minute * (60 * 1000))/1000);
+                ms = Math.floor(accumulationTime % 1000);
+
+                recordTime = accumulationTime - this.state.recordTime;
+                minute2 = Math.floor(recordTime / (60 * 1000));
+                second2 = Math.floor((recordTime - minute * (60 * 1000))/1000);
+                ms2 = Math.floor(recordTime % 1000);
+                
+                this.setState({
+                    currentTime: currentTime,
+                    sectionTime: this._zero(minute2)+":"+this._zero(second2)+"."+ms,
+                    totalTime: this._zero(minute)+":"+this._zero(second)+"."+ms,
+                });
+
+                //暂停计时
+                if(!this.state.watching){
+                    this.setState({
+                        accumulationTime:accumulationTime,
+                    });
+                    clearInterval(intervalID);
+                }
+            },10);
+        
+    }
+
+    stopWatch(){
+        this.setState({
+            watching: false,
+        });
+    }
+
+    addRecord(){
+        if(this.state.isReset){
+            this.startWatch();
+        }else{
+            let {recordCounter,records} = this.state;
+            recordCounter ++;
+            records.pop();
+            records.unshift({
+                title:"计次 "+recordCounter,
+                time:this.state.sectionTime,
+            });
+            this.setState({
+                recordCounter: recordCounter,
+                recordTime: this.state.accumulationTime + this.state.currentTime - this.state.intialTime,
+                records:records,
+            });
+        }
+    }
+
+    clearWatch(){
+        this.setState ({
+            watching: true,
+            isReset: true,
+            intialTime: 0,
+            currentTime: 0,
+            recordTime: 0,          //最后记录时间
+            accumulationTime: 0,    //累加时间
+            totalTime: "00:00.00",
+            sectionTime: "00:00.00",
+            recordCounter: 0,
+            records:[
+                {title:"",time:""},
+                {title:"",time:""},
+                {title:"",time:""},
+                {title:"",time:""},
+                {title:"",time:""},
+                {title:"",time:""},
+            ]
+        });
+    }
+
     render(){
         return (
             <View style={styles.mainContainer}>
-                <WatchFace/>
-                <WatchControl/>
-                <WatchRecord/>
+                <WatchFace sectionTime={this.state.sectionTime} totalTime={this.state.totalTime}/>
+                <WatchControl startWatch={()=>this.startWatch()} stopWatch={()=>this.stopWatch()} addRecord={()=>this.addRecord()} clearWatch={()=>this.clearWatch()}/>
+                <WatchRecord records={this.state.records}/>
             </View>
         );
+    }
+
+    //============================================================================
+    //
+    // utils 
+    //
+    //============================================================================
+    _zero(value){
+        return value > 9 ? value +"" : "0"+value;
     }
 }
 const styles = StyleSheet.create({
