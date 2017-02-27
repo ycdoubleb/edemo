@@ -11,6 +11,7 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import Swiper from 'react-native-swiper';
 
 import Day1 from './Day1';
+import Day2 from './Day2';
 
 export default class extends Component {
     constructor(props) {
@@ -28,7 +29,7 @@ export default class extends Component {
                 }, {
                     key: 1,
                     title: "A weather app",
-                    component: Day1,
+                    component: Day2,
                     isFA: false,
                     icon: "ios-partly-sunny",
                     size: 60,
@@ -39,7 +40,7 @@ export default class extends Component {
                     title: "twitter",
                     component: Day1,
                     isFA: false,
-                    icon: "logo-twitter",
+                    icon: "logo-twitter", 
                     size: 50,
                     color: "#2aa2ef",
                     hideNav: true
