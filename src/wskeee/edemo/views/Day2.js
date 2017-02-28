@@ -55,7 +55,7 @@ class Weather extends Component{
                         <View style={styles.headInfo}>
                             <Text style={styles.handCity}>{elem.city}</Text>
                             <Text style={styles.handAbs}>{elem.abs}</Text>
-                            <View>
+                            <View style={{flexDirection:'row'}}>
                                 <Text style={styles.handDegree}>{elem.degree}</Text>
                                 <Text style={styles.handCircle}>°</Text>
                             </View>
@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
         color: "#fff",
     },
     handCircle:{
+        position:'relative',
         fontSize: 35,
         color: "#fff",
     }
