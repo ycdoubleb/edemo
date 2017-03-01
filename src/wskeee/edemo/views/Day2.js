@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,ScrollView,Image,TouchableHighlight,StyleSheet} from 'react-native';
+import {View,Text,ScrollView,Image,TouchableHighlight,StyleSheet,PixelRatio} from 'react-native';
 import Dimensions from 'Dimensions';
 import Swiper from 'react-native-swiper';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -23,26 +23,26 @@ class Weather extends Component{
 
             const hoursView = elem.hours.map((hourElem,index) => {
                 return (
-                    <View key={hourElem.key}>
-                        <Text>{hourElem.time}</Text>
-                        <Icon name={hourElem.icon}/>
-                        <Text>{hourElem.degree}</Text>
+                    <View key={hourElem.key} style={styles.hoursTimeContainer}>
+                        <Text style={index == 0 ? styles.hoursTimeNow : styles.hoursTime}>{hourElem.time}</Text>
+                        <Icon style={[styles.hoursTimeIcon,{color:hourElem.color}]} size={25} name={hourElem.icon}/>
+                        <Text style={index == 0 ? styles.hoursTimeDegreeNow : styles.hoursTimeDegree}>{hourElem.degree}</Text>
                     </View>
                 );
             });
 
             const daysView = elem.days.map((dayElem,index) => {
                 return (
-                    <View key={dayElem.key}>
-                        <View>
-                            <Text>{dayElem.day}</Text>
+                    <View key={dayElem.key} style={styles.daysItemContainer}>
+                        <View style={styles.daysNameContainer}>
+                            <Text style={styles.daysName}>{dayElem.day}</Text>
                         </View>
-                        <View>
-                            <Icon name={dayElem.icon}/>
+                        <View style={styles.daysIconContainer}>
+                            <Icon style={[styles.daysIcon]} size={25} name={dayElem.icon}/>
                         </View>
-                        <View>
-                            <Text>{dayElem.low}</Text>
-                            <Text>{dayElem.high}</Text>
+                        <View style={styles.daysTemperatureContainer}>
+                            <Text style={elem.night ? styles.daysTemperatureLowNight : styles.daysTemperatureLow}>{dayElem.low}</Text>
+                            <Text style={styles.daysTemperatureHight}>{dayElem.high}</Text>
                         </View>
                     </View>
                 );
@@ -60,76 +60,87 @@ class Weather extends Component{
                                 <Text style={styles.handCircle}>°</Text>
                             </View>
                         </View>
-                        <View>
-                            <View>
-                                <Text>{elem.today.week}</Text>
+                        <View style={styles.todayContainer}>
+                            <View style={styles.todayHead}>
+                                <Text style={styles.todayWeek}>{elem.today.week}</Text>
+                                <Text style={styles.todayDay}>{elem.today.day}</Text>
                             </View>
-                            <View>
-                                <Text>{elem.today.day}</Text>
-                            </View>
-                            <View>
-                                <Text>{elem.today.low}</Text>
-                            </View>
-                            <View>
-                                <Text>{elem.today.high}</Text>
+                            <View style={styles.todayTail}>
+                                <Text style={elem.night ? styles.todayLowNigth : styles.todayLow}>{elem.today.low}</Text>
+                                <Text style={styles.todayHigh}>{elem.today.high}</Text>
                             </View>
                         </View>
-                        <ScrollView>
-                            {hoursView}
-                        </ScrollView>
-                        <View>
+                        <View style={styles.hoursContainer}>
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                                {hoursView}
+                            </ScrollView>
+                        </View>
+                        
+                        <View style={styles.daysContainer}>
                             {daysView}
                         </View>
-                        <View>
-                            <Text>{elem.info}</Text>
+                        <View style={styles.infoContainer}>
+                            <Text style={styles.infoContent}>{elem.info}</Text>
                         </View>
-                        <View>
-                            <View>
-                                <View>
-                                    <Text>日出：</Text>
-                                    <Text>{elem.rise}</Text>
-                                </View>
-                                <View>
-                                    <Text>日落：</Text>
-                                    <Text>{elem.down}</Text>
-                                </View>
+                        <View style={styles.detailInfoContainer}>
 
-                                <View>
-                                    <Text>降雨概率：</Text>
-                                    <Text>{elem.prop}</Text>
+                            <View style={styles.detailInfoItemContainer}>
+                                <View style={styles.detailInfoItemLine}>
+                                    <Text style={styles.detailInfoLeft}>日出：</Text>
+                                    <Text style={styles.detailInfoRight}>{elem.rise}</Text>
                                 </View>
-                                <View>
-                                    <Text>湿度：</Text>
-                                    <Text>{elem.humi}</Text>
-                                </View>
-
-                                <View>
-                                    <Text>风度：</Text>
-                                    <Text><Text>{elem.dir}</Text>{elem.speed}</Text>
-                                </View>
-                                <View>
-                                    <Text>体感温度：</Text>
-                                    <Text>{elem.feel}</Text>
-                                </View>
-
-                                <View>
-                                    <Text>降水量：</Text>
-                                    <Text>{elem.rain}</Text>
-                                </View>
-                                <View>
-                                    <Text>气压：</Text>
-                                    <Text>{elem.pres}</Text>
-                                </View>
-
-                                <View>
-                                    <Text>能见度：</Text>
-                                    <Text>{elem.sight}</Text>
-                                </View>
-                                <View>
-                                    <Text>紫外线指数：</Text>
-                                    <Text>{elem.uv}</Text>
+                                <View style={styles.detailInfoItemLine}>
+                                    <Text style={styles.detailInfoLeft}>日落：</Text>
+                                    <Text style={styles.detailInfoRight}>{elem.down}</Text>
                                 </View>
                             </View>
+                            
+                            <View style={styles.detailInfoItemContainer}>
+                                <View style={styles.detailInfoItemLine}>
+                                    <Text style={styles.detailInfoLeft}>降雨概率：</Text>
+                                    <Text style={styles.detailInfoRight}>{elem.prop}</Text>
+                                </View>
+                                <View style={styles.detailInfoItemLine}>
+                                    <Text style={styles.detailInfoLeft}>湿度：</Text>
+                                    <Text style={styles.detailInfoRight}>{elem.humi}</Text>
+                                </View>
+                            </View>
+                            
+                            <View style={styles.detailInfoItemContainer}>
+                                <View style={styles.detailInfoItemLine}>
+                                    <Text style={styles.detailInfoLeft}>风度：</Text>
+                                    <Text style={styles.detailInfoRight}><Text style={styles.detailInfoDir}>{elem.dir}</Text>{elem.speed}</Text>
+                                </View>
+                                <View style={styles.detailInfoItemLine}>
+                                    <Text style={styles.detailInfoLeft}>体感温度：</Text>
+                                    <Text style={styles.detailInfoRight}>{elem.feel}</Text>
+                                </View>
+                            </View>
+                            
+
+                            <View style={styles.detailInfoItemContainer}>
+                               <View style={styles.detailInfoItemLine}>
+                                    <Text style={styles.detailInfoLeft}>降水量：</Text>
+                                    <Text style={styles.detailInfoRight}>{elem.rain}</Text>
+                                </View>
+                                <View style={styles.detailInfoItemLine}>
+                                    <Text style={styles.detailInfoLeft}>气压：</Text>
+                                    <Text style={styles.detailInfoRight}>{elem.pres}</Text>
+                                </View> 
+                            </View>
+                            
+
+                            <View style={styles.detailInfoItemContainer}>
+                                <View style={styles.detailInfoItemLine}>
+                                    <Text style={styles.detailInfoLeft}>能见度：</Text>
+                                    <Text style={styles.detailInfoRight}>{elem.sight}</Text>
+                                </View>
+                                <View style={styles.detailInfoItemLine}>
+                                    <Text style={styles.detailInfoLeft}>紫外线指数：</Text>
+                                    <Text style={styles.detailInfoRight}>{elem.uv}</Text>
+                                </View>    
+                            </View>
+                            
                         </View>
                     </ScrollView>
                 </View>
@@ -144,7 +155,7 @@ class Weather extends Component{
                     {slides}
                 </Swiper>
                 <TouchableHighlight>
-                    <Icon name="ios-list-outline"/>
+                    <Icon name="ios-list-outline" style={styles.backBtn}/>
                 </TouchableHighlight>
             </View>
         );
@@ -195,7 +206,184 @@ const styles = StyleSheet.create({
     },
     handCircle:{
         position:'relative',
+        top:15,
         fontSize: 35,
         color: "#fff",
-    }
+    },
+    //==============================================================
+    // today
+    //==============================================================
+    todayContainer:{
+        flexDirection: "row",
+        width: Dimensions.get('window').width,
+    },
+    todayHead:{
+        flex:1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        paddingLeft: 15,
+    },
+    todayTail:{
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        paddingRight: 15,
+    },
+    todayWeek:{
+        fontSize: 15,
+        color: "#fff",
+        width:50,
+    },
+    todayDay:{
+        fontSize: 15,
+        color: "#fff",
+    },
+    todayLow:{
+        fontSize: 15,
+        color: "#eee",
+        width:30,
+    },
+    todayLowNigth:{
+        fontSize: 15,
+        color: "#aaa",
+        width:30,
+    },
+    todayHigh:{
+        fontSize: 15,
+        color: "#fff",
+    }, 
+
+    //==============================================================
+    // hoursContainer
+    //==============================================================
+    hoursContainer:{
+        marginTop: 5,
+        marginBottom: 5,
+        height: 100,
+        borderTopColor:"rgba(255,255,255,0.7)",
+        borderTopWidth: 1 / PixelRatio.get(),
+        borderBottomColor:"rgba(255,255,255,0.7)",
+        borderBottomWidth: 1 / PixelRatio.get(),
+    },
+    hoursTimeContainer:{
+        flex: 1,
+        width: 60,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+    hoursTime:{
+        color: '#fff',
+        fontSize: 12,
+    },
+    hoursTimeNow:{
+        color: '#fff',
+        fontSize: 13,
+        fontWeight: "500",
+    },
+    hoursTimeIcon:{
+        color: '#fff',
+    },
+    hoursTimeDegree:{
+        color: '#fff',
+        fontSize: 12,
+    },
+    hoursTimeDegreeNow:{
+        color: '#fff',
+        fontSize: 13,
+        fontWeight: "500",
+    },
+
+    //==============================================================
+    // days
+    //==============================================================
+    daysContainer:{
+        width: Dimensions.get('window').width,
+    },
+    daysItemContainer:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+        paddingRight: 15,
+    },
+    daysNameContainer:{},
+    daysIconContainer:{},
+    daysTemperatureContainer:{
+        flexDirection: 'row',
+        width:50,
+        justifyContent: 'space-between',
+    },
+    daysName:{
+        fontSize: 16,
+        color: '#fff',
+    },
+    daysIcon:{
+        color: '#fff',
+    },
+    //低温白天
+    daysTemperatureLow:{
+        fontSize: 16,
+        color: '#eee',
+    },
+    //低温晚上
+    daysTemperatureLowNight:{
+        fontSize: 16,
+        color: '#aaa',
+    },
+    daysTemperatureHight:{
+        fontSize: 16,
+        color: '#fff',
+    },
+    //==============================================================
+    // infoContainer
+    //==============================================================
+    infoContainer:{
+        marginTop: 5,
+        marginBottom: 5,
+        height: 50,
+        borderTopColor: "rgba(255,255,255,0.7)",
+        borderTopWidth: 1 / PixelRatio.get(),
+        borderBottomColor: "rgba(255,255,255,0.7)",
+        borderBottomWidth: 1 / PixelRatio.get(),
+        justifyContent: 'center',
+    },
+    infoContent:{
+        fontSize: 16,
+        color: '#fff',
+        textAlign: 'center',
+    },
+    //==============================================================
+    // detail info
+    //==============================================================
+    detailInfoContainer:{
+        
+    },
+    detailInfoItemContainer:{
+        marginTop: 5,
+        marginBottom: 5,
+    },
+    detailInfoItemLine:{
+        flexDirection: 'row',
+    },
+    detailInfoLeft:{
+        flex: 1,
+        fontSize: 15,
+        color: "#fff",
+        textAlign: 'right',
+        paddingRight: 20,
+    },
+    detailInfoRight:{
+        flex: 1,
+        fontSize: 16,
+        color: "#fff",
+    },
+    detailInfoDir:{
+        fontSize: 9,
+        color: 'rgba(255,255,255,0.9)',
+    },
+    //==============================================================
+    // backBtn
+    //==============================================================
+    backBtn:{
+        color: '#fff',
+    },
 });
