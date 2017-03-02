@@ -80,7 +80,7 @@ export default class extends Component {
         this.props.navigator.push({
             title:this.state.days[index].title,
             index:index + 1,
-            display:this.state.days[index].hideNav,
+            display:!this.state.days[index].hideNav,
             component:this.state.days[index].component, 
         }); 
     };

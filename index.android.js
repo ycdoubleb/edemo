@@ -6,10 +6,12 @@
 
 import React, { Component } from 'react';
 import {
+  Platform,
   AppRegistry,
   StyleSheet,
   Text,
   View,
+  StatusBar,
   Navigator,
   TouchableOpacity,
 } from 'react-native';
@@ -18,7 +20,34 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import MainView from './src/wskeee/edemo/views/MainView';
 
+class NavigationBar extends Navigator.NavigationBar{
+  constructor (props) {
+    super(props)
+  }
+
+  render(){
+    var routes = this.props.navState.routeStack;
+    if(routes.length){
+      var route = routes[routes.length-1];
+      if(route.display === false){
+        return null;
+      }
+    }
+    return super.render();
+  }
+}
+
 export default class EDome extends Component {
+  componentDidMount() {
+    if(Platform.OS === 'ios'){
+      StatusBar.setBarStyle(1);
+    }else{
+      StatusBar.setBackgroundColor("rgba(0,0,0,0)"); 
+      StatusBar.setHidden(false);
+      StatusBar.setTranslucent(true);
+    }
+  }
+  
   /**
    * 配置
    */
@@ -53,24 +82,24 @@ export default class EDome extends Component {
   render() {
     return (
       <Navigator
-        initialRoute={{
-          title:'30 day of RN',
-          index:0,
-          display:true, 
-          component:MainView,
-        }}
-        configureScene={this.configureScene}
-        renderScene={(route,navigator)=>{
-            return <route.component navigator={navigator} {...route} />
+          initialRoute={{
+            title:'30 day of RN',
+            index:0,
+            display:true, 
+            component:MainView,
+          }}
+          configureScene={this.configureScene}
+          renderScene={(route,navigator)=>{
+              return <route.component navigator={navigator} {...route} /> 
+            }
           }
-        }
-        navigationBar={
-          <Navigator.NavigationBar
-            routeMapper = {this.routeMapper}
-            style = {styles.navBar}
-          />
-        }
-      />
+          navigationBar={
+            <NavigationBar
+              routeMapper = {this.routeMapper}
+              style = {styles.navBar}
+            />
+          }
+        /> 
     );
   }
 }
@@ -85,7 +114,7 @@ const styles = StyleSheet.create({
     borderBottomColor:'#ccc',
   },
   navBackBtn: {
-    paddingTop: 10,
+    paddingTop: 25,
     paddingLeft: 10,
     fontSize: 18,
     color: "#555",
@@ -96,7 +125,7 @@ const styles = StyleSheet.create({
   },
   navTitle:{
     fontWeight:"500",
-    paddingTop:10,
+    paddingTop:25,
     fontSize:18,
     textAlign:'center',
   }

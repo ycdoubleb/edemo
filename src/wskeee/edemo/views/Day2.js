@@ -9,7 +9,7 @@ const weatherData = [{key:0,city:"\u798f\u5dde",night:!0,bg:require("./../assets
 
 class Weather extends Component{
     static propTypes = {
-        
+        onBackPress: React.PropTypes.func.isRequired,
     }
     constructor(props){
         super(props);
@@ -49,7 +49,7 @@ class Weather extends Component{
             });
 
             return (
-                <View key={elem.key}>
+                <View key={elem.key} style={styles.weatherPage}>
                     <Image source={elem.bg} />
                     <ScrollView style={styles.pageContainer} showsVerticalScrollIndicator={false}>
                         <View style={styles.headInfo}>
@@ -149,13 +149,19 @@ class Weather extends Component{
         }); 
         
         return (
-            <View>
+            <View style={styles.weatherContainer}>
                 <Swiper 
+                    paginationStyle={{
+                        bottom: 10,
+                        paddingTop: 10,
+                        borderTopColor: 'rgba(255,255,255,0.7)',
+                        borderTopWidth: 1 / PixelRatio.get(),
+                    }}
                     showsButtons={false}>
                     {slides}
                 </Swiper>
-                <TouchableHighlight>
-                    <Icon name="ios-list-outline" style={styles.backBtn}/>
+                <TouchableHighlight style={styles.backBtn} onPress={() => this.props.onBackPress()}>
+                    <Icon name="ios-list-outline" size={25} style={styles.backBtnIcon} />
                 </TouchableHighlight>
             </View>
         );
@@ -164,25 +170,33 @@ class Weather extends Component{
 }
 
 export default class Day2 extends React.Component{
+
+    onBackPress(){
+        this.props.navigator.pop();
+    }
+
     render(){
         return (
             <View>
-                <Weather />
+                <Weather onBackPress = {() => this.onBackPress()} />
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    weatherContainer:{
+    },
+    weatherPage:{
+    },
     //==============================================================
     // PageContainer
     //==============================================================
     pageContainer:{
         position: "absolute",
-        top: 20,
-        left: 0,
+        top:25,
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height - 53,
+        height: Dimensions.get('window').height - 60,
     },
     //==============================================================
     // headInfo
@@ -384,6 +398,11 @@ const styles = StyleSheet.create({
     // backBtn
     //==============================================================
     backBtn:{
+        position: 'absolute',
+        right: 10,
+        bottom: 7,
+    },
+    backBtnIcon:{
         color: '#fff',
     },
 });
