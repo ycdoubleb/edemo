@@ -12,6 +12,7 @@ import Swiper from 'react-native-swiper';
 
 import Day1 from './Day1';
 import Day2 from './Day2';
+import Day3 from './day3/Index';
 
 export default class extends Component {
     constructor(props) {
@@ -38,7 +39,7 @@ export default class extends Component {
                 }, {
                     key: 2,
                     title: "twitter",
-                    component: Day1,
+                    component: Day3,
                     isFA: false,
                     icon: "logo-twitter", 
                     size: 50,
