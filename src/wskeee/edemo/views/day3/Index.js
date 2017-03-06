@@ -13,14 +13,19 @@ export default class extends Component {
         isEnter:Boolean,
     }
 
-    
+    constructor(props){
+        super(props);
+        this.state={
+            isEnter : false,
+        }
+    }
 
     render() {
-        let entrance = this.state.isEnter ? '' : <Entrance />;
+        let entrance = this.state.isEnter ? <View/> : <Entrance onEnd={()=>{this.setState({isEnter:true})}} />;
         return (
             <View>
                 <TwitterTab />
-                {entrance}
+                {entrance} 
             </View>
         );
     }

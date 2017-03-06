@@ -84,11 +84,12 @@ class TwitterPost extends Component{
   render() {
     return(
       <ScrollView
+      locked={true}
       refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={()=>this._onRefresh()}
-            tintColor="#ddd"/>}>
+            />}>
             <Image source={require('../assets/imgs/day3.png')} style={{width:Util.size.width, height:Util.size.height-110}}></Image>
       </ScrollView>
     )

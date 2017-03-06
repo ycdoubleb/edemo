@@ -22,6 +22,10 @@ export default class Entrance extends Component{
         opacityAnima: Animated,
     }
 
+    propsTypes={
+        onEnd:React.PropTypes.func,
+    }
+
     constructor (props) {
         super(props);
         this.state = {
@@ -43,6 +47,9 @@ export default class Entrance extends Component{
             delay: 2000,
             easing: Easing.elastic(1),
         }).start();
+        setTimeout(()=>{
+            this.props.onEnd();
+        },3000);
     }
     
     

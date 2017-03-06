@@ -14,6 +14,7 @@ import {
   StatusBar,
   Navigator,
   TouchableOpacity,
+  BackAndroid,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -45,8 +46,25 @@ export default class EDome extends Component {
       StatusBar.setBackgroundColor("rgba(0,0,0,0)"); 
       StatusBar.setHidden(false);
       StatusBar.setTranslucent(true);
+      BackAndroid.addEventListener("hardwareBackPress",this.onBack);
     }
   }
+
+  componentWillUnmount(){
+    if(Platform.OS === 'android'){
+      BackAndroid.removeEventListener("hardwareBackPress",this.onBack);
+    }
+  }
+
+  onBack = ()=>{
+    let nav = this.refs.nav;
+    const routes = nav.getCurrentRoutes();
+    if(routes.length > 1){
+      nav.pop();
+      return true;
+    }
+    return false;
+  };
   
   /**
    * 配置
@@ -82,6 +100,7 @@ export default class EDome extends Component {
   render() {
     return (
       <Navigator
+          ref='nav'
           initialRoute={{
             title:'30 day of RN',
             index:0,

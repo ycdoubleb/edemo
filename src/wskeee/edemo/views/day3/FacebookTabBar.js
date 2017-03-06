@@ -4,6 +4,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  PixelRatio,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -44,7 +45,7 @@ const FacebookTabBar = React.createClass({
     return <View style={[styles.tabs, this.props.style, ]}>
       {this.props.tabs.map((tab, i) => {
         return <TouchableOpacity key={tab} onPress={() => this.props.goToPage(i)} style={styles.tab}>
-          <View>
+          <View style={styles.menuItem}>
             <Icon
               name={tab}
               size={30}
@@ -71,11 +72,15 @@ const styles = StyleSheet.create({
     height: 60,
     flexDirection: 'row',
     paddingTop: 5,
-    borderWidth: 1,
-    borderTopWidth: 0,
+    borderTopWidth: 2/PixelRatio.get(),
     borderLeftWidth: 0,
     borderRightWidth: 0,
-    borderBottomColor: 'rgba(0,0,0,0.05)',
+    borderBottomColor: 'rgba(0,0,0,1)',
+    borderTopColor: 'rgba(0,0,0,0.1)',
+    backgroundColor:"#eee",
+  },
+  menuItem:{
+    alignItems: 'center', 
   },
 });
 
