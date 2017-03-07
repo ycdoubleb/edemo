@@ -61,8 +61,8 @@ export default class extends Component{
         this._stageHeight = this.props.stageHeight;
         this._previousLeft = this._stageWidth - this.BALL_SIZE >> 1;
         this._previousTop = this._stageHeight - this.BALL_SIZE >> 1;
-        this._maxLeft = this._stageWidth - this.BALL_SIZE / 2;
-        this._maxTop = this._stageHeight - this.BALL_SIZE / 2;
+        this._maxLeft = this._stageWidth - this.BALL_SIZE;
+        this._maxTop = this._stageHeight - this.BALL_SIZE;
         this.circleStyle = {style:{
             left: this._previousLeft,
             top: this._previousTop,
@@ -80,19 +80,17 @@ export default class extends Component{
         
     }
     onPanResponderMove(evt,gesture){
-        let left = this.circleStyle.style.left;
-        let top = this.circleStyle.style.top;
+        let left = this._previousLeft + gesture.dx;;
+        let top = this._previousTop + gesture.dy;;
         const ballRadius = this.BALL_SIZE/2;
-        left += gesture.dx;
-        top += gesture.dy;
-        if(left<ballRadius)
-            left = ballRadius;
+        if(left<0)
+            left = 0;
         else if(left>this._maxLeft){
             left = this._maxLeft;
         }
 
-        if(top<ballRadius){
-            top = ballRadius;
+        if(top<0){
+            top = 0;
         }else if(top>this._maxTop)
             top = this._maxTop;
         
@@ -110,6 +108,9 @@ export default class extends Component{
     onPanResponderRelease(evt,gesture){
         this._previousLeft += gesture.dx;
         this._previousTop += gesture.dy;
+        this.setState({
+      color: "rgba(255,255,255,0.7)"
+    });
     }
     onPanResponderTerminationRequest(evt,gesture){
 
@@ -135,7 +136,7 @@ export default class extends Component{
     render(){
         return (
             <View ref={(circle)=>{this.circle = circle}} style={styles.ballContainer} {...this.panResponder.panHandlers}>
-                <Icon name='ios-baseball' size={this.BALL_SIZE} color={this.state.color}/>
+                <Icon ref='icon' name='ios-baseball' size={this.BALL_SIZE} color={this.state.color}/>
             </View>
         );
     }
@@ -145,5 +146,6 @@ export default class extends Component{
 const styles = StyleSheet.create({
     ballContainer:{
         position: 'absolute',
+        borderWidth: 1,
     }
 });

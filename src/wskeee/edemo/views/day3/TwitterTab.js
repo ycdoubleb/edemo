@@ -37,7 +37,6 @@ export default class extends Component{
                 </View>
                 
                 <ScrollableTabView 
-                    style ={{borderWidth: 1,}}
                     tabBarPosition = 'bottom'
                     renderTabBar = {() => <FacebookTabBar tabNames={this.state.tabNames} />}
                 >
