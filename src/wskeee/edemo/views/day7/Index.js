@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Image} from 'react-native';
+import {View, StyleSheet, Image,PanResponder } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import Util from '../utils';
 import MoveableCircle from './MoveableCircle';

@@ -42,8 +42,8 @@ export default class extends Component{
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: (evt,gesture) => true,
             onStartShouldSetPanResponderCapture: (evt,gesture) => true,
-            onMoveShouldSetPanResponder: (evt,gesture) => true,
-            onMoveShouldSetPanResponderCapture: (evt,gesture) => true,
+            onMoveShouldSetPanResponder: (evt,gesture) => false,
+            onMoveShouldSetPanResponderCapture: (evt,gesture) => false,
             
             onPanResponderGrant: (evt,gesture) => this.onPanResponderGrant(evt,gesture),
             onPanResponderStart: (evt,gesture) => this.onPanResponderStart(evt,gesture),
@@ -72,14 +72,16 @@ export default class extends Component{
     
 
     onPanResponderGrant(evt,gesture){
+        console.warn('Grant');
         this.setState({
              color: 'rgba(255,255,255,1)',
         });
     }
     onPanResponderStart(evt,gesture){
-        
+        console.warn('Start');
     }
     onPanResponderMove(evt,gesture){
+        console.warn('Move');
         let left = this._previousLeft + gesture.dx;;
         let top = this._previousTop + gesture.dy;;
         const ballRadius = this.BALL_SIZE/2;
@@ -99,28 +101,27 @@ export default class extends Component{
 
         this.updateBall();
     }
-    onPanResponderStart(evt,gesture){
-
-    }
     onPanResponderEnd(evt,gesture){
-
+        console.warn('End');
     }
     onPanResponderRelease(evt,gesture){
+        console.warn('Release');
         this._previousLeft += gesture.dx;
         this._previousTop += gesture.dy;
         this.setState({
-      color: "rgba(255,255,255,0.7)"
-    });
+            color: "rgba(255,255,255,0.7)"
+        });
     }
     onPanResponderTerminationRequest(evt,gesture){
-
+        console.warn('Request');
     }
     onPanResponderTerminate(evt,gesture){
+        console.warn('Terminate');
         this._previousLeft += gesture.dx;
         this._previousTop += gesture.dy;
     }
     onPanResponderReject(evt,gesture){
-
+        console.warn('Reject');
     }
 
     //============================================================================
