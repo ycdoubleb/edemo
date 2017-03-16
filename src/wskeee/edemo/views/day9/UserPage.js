@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Image, StyleSheet} from 'react-native';
+import {View, Image, StyleSheet,Text} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -26,10 +26,15 @@ export default class extends Component{
     // act
     //
     //============================================================================
-    redner(){
+    render(){
         return (
             <View style={styles.rootContainer}>
-                <Image style={styles.banner} source={require('../../assets/imgs/day2.png')}/>
+                <View style={styles.userContainer}>
+                    <Image style={styles.banner} source={require('../../assets/imgs/day2.png')}/>
+                    <View style={[styles.avatarContainer]}>
+                        <Image style={styles.avatar}/>
+                    </View>
+                </View>
             </View>
         );
     }
@@ -37,9 +42,24 @@ export default class extends Component{
 
 const styles = StyleSheet.create({
     rootContainer:{
-        
+        width: Util.size.width,
+    },
+    //==============================================================
+    // 用户面板
+    //==============================================================
+    userContainer:{
+
     },
     banner:{
-        
+        width: Util.size.width,
     },
+    avatarContainer:{
+
+    },
+    avatar:{
+
+    },
+    //==============================================================
+    // 内容
+    //==============================================================
 });
