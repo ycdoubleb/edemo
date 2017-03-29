@@ -22,7 +22,7 @@ import Day9 from './day9/Index';
 import Day10 from './day10/Index';
 import Day11 from './day5';
 import Day12 from './day5';
-import Day13 from './day5';
+import Day13 from './day13/Index';
 import Day14 from './day5';
 import Day15 from './day5';
 import Day16 from './day5';
